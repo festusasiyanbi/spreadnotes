@@ -1,0 +1,23 @@
+"use client";
+
+import { ArrowLeft, ArrowRight, Check, Layers3, Link2, Megaphone, Sparkles } from "lucide-react";
+import { useSimulationStore } from "../simulation/store";
+import { platforms, adNetworks } from "../platforms/catalog";
+import { NetworkMark } from "../platforms/network-mark";
+import { Brand } from "../shell/brand";
+import { ThemeToggle } from "../shell/theme-toggle";
+import { useEffect, useState } from "react";
+
+export function Onboarding() {
+  const [isStaging, setIsStaging] = useState(false);
+  useEffect(() => setIsStaging(window.location.hostname === "staging.spreadnotes.app"), []);
+  const { workspaceName, onboardingStep: step, connected, adConnected, setWorkspaceName, setOnboardingStep, toggleConnection, toggleAdConnection } = useSimulationStore();
+  const canContinue = step !== 0 || workspaceName.trim().length > 1;
+  return <main className="onboarding-page"><header className="onboarding-header"><Brand href="/" /><div><span className="simulation-badge">{isStaging ? "STAGING · TEST" : "SIMULATION"}</span><ThemeToggle label={false} /></div></header><div className="onboarding-layout"><aside className="onboarding-aside"><span className="eyebrow">LET’S SET THE STAGE</span><h1>Make this space<br /><em>your own.</em></h1><p>Three short steps, then the whole SpreadNotes workspace is yours to explore.</p><div className="onboarding-steps">{["Your workspace", "Social channels", "Ad accounts"].map((label, index) => <div key={label} className={`onboarding-step ${step === index ? "current" : ""} ${step > index ? "done" : ""}`}><span>{step > index ? <Check size={15} /> : String(index + 1).padStart(2, "0")}</span><strong>{label}</strong></div>)}</div><div className="onboarding-aside-note"><Sparkles size={19} /><span>Everything here is simulated. This visit resets when you reload.</span></div></aside><section className="onboarding-panel">
+      <span className="step-counter">STEP {step + 1} OF 3</span>
+      {step === 0 && <><div className="onboarding-icon"><Layers3 size={25} /></div><h2>Name your workspace.</h2><p>Your name was added when you signed in. Give this creative desk a name. This stays in your browser only until you reload.</p><div className="form-stack"><label>Workspace name<input value={workspaceName} onChange={(event) => setWorkspaceName(event.target.value)} placeholder="e.g. My studio" maxLength={60} /></label></div></>}
+      {step === 1 && <><div className="onboarding-icon"><Link2 size={25} /></div><h2>Connect your channels.</h2><p>Connect the channels you want to test. This simulates access; no real account permissions are requested.</p><div className="connection-picker">{platforms.map((platform) => <div key={platform.id} className={`connection-choice ${connected.includes(platform.id) ? "is-selected" : ""}`}><NetworkMark id={platform.id} /><span>{platform.name}</span><button type="button" className={`connect-button ${connected.includes(platform.id) ? "connected" : ""}`} aria-label={`${connected.includes(platform.id) ? "Disconnect" : "Connect"} ${platform.name} (simulation)`} onClick={() => toggleConnection(platform.id)}>{connected.includes(platform.id) ? <><Check size={14} /> Connected</> : "Connect"}</button></div>)}</div><small className="field-hint">You can change these later in Connections.</small></>}
+      {step === 2 && <><div className="onboarding-icon"><Megaphone size={25} /></div><h2>Make room for paid reach.</h2><p>Choose ad accounts to explore the campaign builder. Every budget and connection is sample data.</p><div className="connection-picker">{adNetworks.map((network) => <button key={network.id} className={`connection-choice ${adConnected.includes(network.id) ? "is-selected" : ""}`} onClick={() => toggleAdConnection(network.id)}><NetworkMark id={network.id} /><span><strong>{network.name}</strong><small>{network.description}</small></span><span className="choice-check">{adConnected.includes(network.id) ? <Check size={14} /> : null}</span></button>)}</div><small className="field-hint">Ads remain available to explore even if you skip this step.</small></>}
+      <div className="onboarding-actions">{step > 0 && <button className="button button-quiet" onClick={() => setOnboardingStep(step - 1)}><ArrowLeft size={16} /> Back</button>}<button disabled={!canContinue} className="button button-primary" onClick={() => setOnboardingStep(step + 1)}>{step === 2 ? "Enter workspace" : "Continue"} <ArrowRight size={17} /></button></div>
+    </section></div></main>;
+}

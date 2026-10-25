@@ -1,0 +1,22 @@
+"use client";
+
+import { useEffect, useMemo, useState } from "react";
+import type { GeoSelection } from "../simulation/store";
+
+type Country = { code: string; name: string };
+type City = { id: string; name: string };
+type State = { id: string; code: string; name: string; cities: City[] };
+
+export function GeoSelector({ value, onChange, label }: { value?: GeoSelection; onChange: (value: GeoSelection | undefined) => void; label: string }) {
+  const [countries, setCountries] = useState<Country[]>([]);
+  const [states, setStates] = useState<State[]>([]);
+  const [countrySearch, setCountrySearch] = useState("");
+  const [stateSearch, setStateSearch] = useState("");
+  const [citySearch, setCitySearch] = useState("");
+  const [error, setError] = useState("");
+  useEffect(() => { let active = true; fetch("/geo/countries.json").then((response) => { if (!response.ok) throw Error("Countries unavailable"); return response.json(); }).then((data: Country[]) => { if (active) setCountries(data); }).catch(() => { if (active) setError("The location list could not load. Please retry."); }); return () => { active = false; }; }, []);
+  useEffect(() => { if (!value?.countryCode) { setStates([]); return; } let active = true; fetch(`/geo/${value.countryCode.toLowerCase()}.json`).then((response) => { if (!response.ok) throw Error("Regions unavailable"); return response.json(); }).then((data: { states: State[] }) => { if (active) { setStates(data.states); setError(""); } }).catch(() => { if (active) setError("Regions could not load. Choose a different country or retry."); }); return () => { active = false; }; }, [value?.countryCode]);
+  const regions = useMemo(() => states.filter((item) => item.name.toLowerCase().includes(stateSearch.toLowerCase()) || item.id === value?.stateId), [states, stateSearch, value?.stateId]);
+  const cities = useMemo(() => states.find((item) => item.id === value?.stateId)?.cities.filter((item) => item.name.toLowerCase().includes(citySearch.toLowerCase()) || item.id === value?.cityId) ?? [], [states, value?.stateId, value?.cityId, citySearch]);
+  return <div className="geo-selector"><strong>{label}</strong><div className="geo-fields"><label>Find country<input value={countrySearch} onChange={(event) => setCountrySearch(event.target.value)} placeholder="Search countries" /><select aria-label={`${label} country`} value={value?.countryCode ?? ""} onChange={(event) => { const country = countries.find((item) => item.code === event.target.value); onChange(country ? { countryCode: country.code, countryName: country.name } : undefined); setStateSearch(""); setCitySearch(""); }}><option value="">Select country</option>{countries.filter((item) => item.name.toLowerCase().includes(countrySearch.toLowerCase()) || item.code === value?.countryCode).map((item) => <option key={item.code} value={item.code}>{item.name}</option>)}</select></label><label>Find state or province<input value={stateSearch} onChange={(event) => setStateSearch(event.target.value)} disabled={!value?.countryCode} placeholder="Search regions" /><select aria-label={`${label} state or province`} value={value?.stateId ?? ""} disabled={!value?.countryCode || !states.length} onChange={(event) => { const state = states.find((item) => item.id === event.target.value); onChange(value ? { ...value, stateId: state?.id, stateName: state?.name, cityId: undefined, cityName: undefined } : undefined); setCitySearch(""); }}><option value="">Any region</option>{regions.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}</select></label><label>Find city<input value={citySearch} onChange={(event) => setCitySearch(event.target.value)} disabled={!value?.stateId} placeholder="Search cities" /><select aria-label={`${label} city`} value={value?.cityId ?? ""} disabled={!value?.stateId} onChange={(event) => { const city = cities.find((item) => item.id === event.target.value); onChange(value ? { ...value, cityId: city?.id, cityName: city?.name } : undefined); }}><option value="">Any city</option>{cities.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}</select></label></div>{error && <p role="alert">{error}</p>}<small>Reference locations only. Availability must be checked with the selected ad account. Data: <a href="https://github.com/dr5hn/countries-states-cities-database" target="_blank" rel="noreferrer">Countries States Cities Database</a> (ODbL).</small></div>;
+}

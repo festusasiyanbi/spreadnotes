@@ -7,6 +7,13 @@ import sharp from "sharp";
 const root = fileURLToPath(new URL("../", import.meta.url));
 const pages = JSON.parse(await readFile(join(root, "features/seo/content.json"), "utf8"));
 const origin = new URL(process.argv[2] || "http://localhost:3000");
+const local = ["localhost", "127.0.0.1"].includes(origin.hostname);
+const checks = local ? Object.values(pages).map((page) => ({ page, url: new URL(page.path, origin) })) : [
+  { page: pages.home, url: new URL("/", origin) },
+  { page: pages.signIn, url: new URL("/sign-in", process.env.NEXT_PUBLIC_APP_ORIGIN || "https://app.spreadnotes.app") },
+  { page: pages.workspace, url: new URL("/", process.env.NEXT_PUBLIC_APP_ORIGIN || "https://app.spreadnotes.app") },
+  { page: pages.workspace, url: new URL("/", process.env.NEXT_PUBLIC_STAGING_ORIGIN || "https://staging.spreadnotes.app") },
+];
 
 function tags(html, element) {
   return [...html.matchAll(new RegExp(`<${element}\\s+[^>]*>`, "g"))].map(([tag]) =>
@@ -20,8 +27,7 @@ function singleMeta(meta, key) {
   return matches[0].content;
 }
 
-for (const page of Object.values(pages)) {
-  const pageUrl = new URL(page.path, origin);
+for (const { page, url: pageUrl } of checks) {
   const response = await fetch(pageUrl);
   assert.equal(response.status, 200, `${page.path} did not return HTTP 200`);
   const html = await response.text();
@@ -33,8 +39,8 @@ for (const page of Object.values(pages)) {
   assert.equal(singleMeta(meta, "og:type"), "website");
   assert.equal(singleMeta(meta, "og:site_name"), "SpreadNotes");
   assert.equal(singleMeta(meta, "og:locale"), "en_US");
-  assert.equal(new URL(singleMeta(meta, "og:url")).pathname, page.path);
-  assert.equal(new URL(singleMeta(meta, "og:url")).origin, origin.origin);
+  assert.equal(new URL(singleMeta(meta, "og:url")).pathname, pageUrl.pathname);
+  if (!local) assert.equal(new URL(singleMeta(meta, "og:url")).origin, pageUrl.origin);
   assert.equal(singleMeta(meta, "og:image:alt"), page.imageAlt);
   assert.equal(singleMeta(meta, "og:image:type"), "image/png");
   assert.equal(singleMeta(meta, "og:image:width"), "1200");
@@ -47,7 +53,7 @@ for (const page of Object.values(pages)) {
 
   if (page.indexable) {
     assert.equal(canonical.length, 1, `${page.path} must have one canonical URL`);
-    assert.equal(new URL(canonical[0].href).origin, origin.origin);
+    if (!local) assert.equal(new URL(canonical[0].href).origin, pageUrl.origin);
     assert.equal(new URL(canonical[0].href).pathname, page.path);
     assert.ok(!meta.some((tag) => tag.name === "robots" && tag.content.includes("noindex")));
   } else {
@@ -58,8 +64,8 @@ for (const page of Object.values(pages)) {
 
   for (const key of ["og:image", "twitter:image"]) {
     const imageUrl = new URL(singleMeta(meta, key));
-    assert.equal(imageUrl.origin, origin.origin, `${key} points to another origin`);
-    const imageResponse = await fetch(imageUrl);
+    assert.equal(imageUrl.origin, new URL(singleMeta(meta, "og:url")).origin, `${key} points to another origin`);
+    const imageResponse = await fetch(local ? new URL(imageUrl.pathname + imageUrl.search, origin) : imageUrl);
     assert.equal(imageResponse.status, 200, `${key} did not return HTTP 200`);
     assert.match(imageResponse.headers.get("content-type") || "", /^image\/png/);
     const image = sharp(Buffer.from(await imageResponse.arrayBuffer()));
@@ -67,5 +73,5 @@ for (const page of Object.values(pages)) {
     assert.deepEqual([width, height], [1200, 630]);
   }
 
-  console.log(`✓ ${page.path} metadata and images`);
+  console.log(`✓ ${pageUrl} metadata and images`);
 }

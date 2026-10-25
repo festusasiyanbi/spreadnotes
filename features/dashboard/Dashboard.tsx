@@ -1,14 +1,14 @@
 "use client";
 
 import { ArrowRight, BarChart3, CalendarDays, CircleCheck, Megaphone, PenLine, Sparkles } from "lucide-react";
-import { useDemoStore } from "../demo/store";
-import { Queue } from "../publishing/Queue";
-import { QuickCreate } from "../composer/QuickCreate";
-import { NetworkMark } from "../platforms/NetworkMark";
-import type { AppView } from "../shell/AppShell";
+import { useSimulationStore } from "../simulation/store";
+import { Queue } from "../publishing/queue";
+import { QuickCreate } from "../composer/quick-create";
+import { NetworkMark } from "../platforms/network-mark";
+import type { AppView } from "../shell/app-shell";
 
 export function Dashboard({ onNavigate, onOpenPost, onOpenCampaign, onEditPost }: { onNavigate: (view: AppView) => void; onOpenPost: (id: string) => void; onOpenCampaign: (id: string) => void; onEditPost: (id: string) => void }) {
-  const { displayName, connected, adConnected, posts, campaigns, onboardingDismissed, setOnboardingDismissed } = useDemoStore();
+  const { displayName, connected, adConnected, posts, campaigns, onboardingDismissed, setOnboardingDismissed } = useSimulationStore();
   const firstName = displayName.split(" ")[0] || "there";
   const scheduled = posts.filter((post) => post.status === "scheduled").length;
   const ready = posts.filter((post) => post.status === "draft").length;
@@ -27,7 +27,7 @@ export function Dashboard({ onNavigate, onOpenPost, onOpenCampaign, onEditPost }
     <section className="panel-card padded dashboard-analytics-link"><div><span className="eyebrow">SAMPLE INSIGHTS</span><h3>See how posts and campaigns perform.</h3><p>Explore reports within the metrics available from each platform API.</p></div><button className="button button-outline" onClick={() => onNavigate("analytics")}>Open analytics <BarChart3 size={17} /></button></section>
     <div className="dashboard-columns"><section className="panel-card"><div className="panel-heading"><div><span className="eyebrow">YOUR CONTENT</span><h3>Recent posts</h3></div><button className="inline-link" onClick={() => onNavigate("library")}>View all <ArrowRight size={15} /></button></div>{posts.length === 0 ? <div className="empty-panel"><div className="empty-panel-icon"><PenLine size={23} /></div><h4>Start with a thought.</h4><p>Your drafts and published posts will appear here as you create them.</p><button className="button button-outline" onClick={() => onNavigate("compose")}>Write your first post <ArrowRight size={15} /></button></div> : <div className="list-rows">{posts.slice(0, 3).map((post) => <button className="list-row" key={post.id} onClick={() => onOpenPost(post.id)}><span className="row-icon"><PenLine size={18} /></span><span className="row-copy"><strong>{post.title}</strong><small>{post.channels.length} channel{post.channels.length !== 1 ? "s" : ""} · {new Date(post.createdAt).toLocaleDateString()}</small></span><span className={`status-pill status-${post.status}`}>{post.status.replaceAll("_", " ")}</span><ArrowRight size={16} /></button>)}</div>}</section>
       <section className="panel-card"><div className="panel-heading"><div><span className="eyebrow">PAID REACH</span><h3>Ad campaigns</h3></div><button className="inline-link" onClick={() => onNavigate("ads")}>Open Ads <ArrowRight size={15} /></button></div>{campaigns.length === 0 ? <div className="empty-panel"><div className="empty-panel-icon"><Megaphone size={23} /></div><h4>Give a good idea room to grow.</h4><p>Plan an ad campaign across your selected networks, with a budget for each.</p><button className="button button-outline" onClick={() => onNavigate("ads")}>Explore Ads <ArrowRight size={15} /></button></div> : <div className="list-rows">{campaigns.slice(0, 3).map((campaign) => <button className="list-row" key={campaign.id} onClick={() => onOpenCampaign(campaign.id)}><span className="row-icon"><Megaphone size={18} /></span><span className="row-copy"><strong>{campaign.name}</strong><small>{campaign.networks.length} network{campaign.networks.length !== 1 ? "s" : ""} · {campaign.currency}</small></span><span className={`status-pill status-${campaign.status}`}>{campaign.status}</span><ArrowRight size={16} /></button>)}</div>}</section></div>
-    <section className="dashboard-bottom"><div><span className="eyebrow">YOUR CHANNELS</span><h3>Where your ideas can go.</h3><p>{connected.length + adConnected.length === 0 ? "Connect a few demo accounts to see them here." : `${connected.length} social · ${adConnected.length} ad account${adConnected.length === 1 ? "" : "s"} selected for this visit.`}</p><button className="inline-link" onClick={() => onNavigate("connections")}>Manage connections <ArrowRight size={16} /></button></div><div className="dashboard-channel-list">{connected.slice(0, 6).map((id) => <NetworkMark key={id} id={id} size="large" />)}{connected.length === 0 && <div className="channels-empty"><Sparkles size={20} /> Choose channels in Connections</div>}</div></section>
-    <p className="demo-footer-note"><CircleCheck size={14} /> All content and statuses on this page are simulated and reset when you reload.</p>
+    <section className="dashboard-bottom"><div><span className="eyebrow">YOUR CHANNELS</span><h3>Where your ideas can go.</h3><p>{connected.length + adConnected.length === 0 ? "Connect a few simulation accounts to see them here." : `${connected.length} social · ${adConnected.length} ad account${adConnected.length === 1 ? "" : "s"} selected for this visit.`}</p><button className="inline-link" onClick={() => onNavigate("connections")}>Manage connections <ArrowRight size={16} /></button></div><div className="dashboard-channel-list">{connected.slice(0, 6).map((id) => <NetworkMark key={id} id={id} size="large" />)}{connected.length === 0 && <div className="channels-empty"><Sparkles size={20} /> Choose channels in Connections</div>}</div></section>
+    <p className="simulation-footer-note"><CircleCheck size={14} /> All content and statuses on this page are simulated and reset when you reload.</p>
   </div>;
 }

@@ -1,4 +1,2 @@
-import { pageMetadata } from "../../features/seo/metadata";
-import { DemoApp } from "../../features/demo/DemoApp";
-export const metadata = pageMetadata("demo");
-export default function Page() { return <DemoApp />; }
+import { permanentRedirect } from "next/navigation";
+export default function Page() { permanentRedirect(process.env.NEXT_PUBLIC_STAGING_ORIGIN?.trim() || "https://staging.spreadnotes.app"); }

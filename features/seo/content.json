@@ -11,22 +11,22 @@
   },
   "signIn": {
     "path": "/sign-in",
-    "title": "Explore the SpreadNotes demo",
+    "title": "Explore the SpreadNotes simulation",
     "description": "Try an interactive preview of social publishing, campaign planning, and reporting in SpreadNotes. No payment or connected account required.",
-    "imageTitle": "Explore the SpreadNotes demo.",
+    "imageTitle": "Explore the SpreadNotes simulation.",
     "imageSubtitle": "Try the publishing workflow. No payment required.",
-    "imageAlt": "SpreadNotes logo and an invitation to explore the interactive demo.",
+    "imageAlt": "SpreadNotes logo and an invitation to explore the interactive simulation.",
     "imageFile": "spreadnotes-social-sign-in-1200x630.png",
     "indexable": false
   },
-  "demo": {
-    "path": "/demo",
-    "title": "SpreadNotes interactive demo",
-    "description": "Explore the SpreadNotes publishing workspace, scheduling flow, ads workspace, and sample analytics in an interactive demo.",
+  "workspace": {
+    "path": "/workspace",
+    "title": "SpreadNotes interactive simulation",
+    "description": "Explore the SpreadNotes publishing workspace, scheduling flow, ads workspace, and sample analytics in an interactive simulation.",
     "imageTitle": "See SpreadNotes in action.",
     "imageSubtitle": "Create, adapt, schedule, and explore sample results.",
-    "imageAlt": "SpreadNotes logo and a summary of the interactive product demo.",
-    "imageFile": "spreadnotes-social-demo-1200x630.png",
+    "imageAlt": "SpreadNotes logo and a summary of the interactive product simulation.",
+    "imageFile": "spreadnotes-social-workspace-1200x630.png",
     "indexable": false
   }
 }
