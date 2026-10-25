@@ -10,7 +10,7 @@ test("Instagram rejects an unsupported image format and aspect ratio before revi
 });
 
 test("sample video poster cannot be scheduled as a playable video", () => {
-  const issues = postIssues("Watch this", [{ kind: "video", type: "video/demo" }], ["youtube"]);
+  const issues = postIssues("Watch this", [{ kind: "video", type: "video/simulation" }], ["youtube"]);
   assert.ok(issues.some((issue) => issue.includes("preview only")));
 });
 

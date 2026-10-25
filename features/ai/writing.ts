@@ -1,4 +1,4 @@
-import type { Post } from "../demo/store";
+import type { Post } from "../simulation/store";
 
 export type WritingProfile = { enabled: boolean; topics: string; audience: string; goals: string; voice: string; preferredTerms: string; bannedTerms: string; examplePostIds: string[]; excludedPostIds: string[] };
 

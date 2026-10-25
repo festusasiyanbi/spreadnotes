@@ -1,10 +1,10 @@
-import type { Campaign, Post } from "../demo/store";
+import type { Campaign, Post } from "../simulation/store";
 import type { AdNetworkId, PlatformId } from "../platforms/types";
 
 export type Metric = { key: string; label: string; value: number; unit?: "money" | "minutes"; note?: string };
 export type Snapshot = { source: "sample"; updatedAt: string; metrics: Metric[] };
 
-// A single capability map drives the demo report and can later gate real API responses.
+// A single capability map drives the simulation report and can later gate real API responses.
 export const organicMetrics: Record<PlatformId, { labels: string[]; note: string; reference: string }> = {
   linkedin: { labels: ["Impressions", "Members reached", "Reactions", "Comments", "Reposts"], note: "Member post analytics needs approved Community Management access.", reference: "https://learn.microsoft.com/en-us/linkedin/marketing/community-management/members/post-statistics" },
   instagram: { labels: ["Views", "Likes", "Comments"], note: "Professional-account media insights vary by media type and API version.", reference: "https://www.postman.com/meta/instagram/collection/6yqw8pt/instagram-api" },

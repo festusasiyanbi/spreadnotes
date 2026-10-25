@@ -16,6 +16,6 @@ The three-stroke mark is based on the site's current CSS logo. The SVG is the ed
 
 The installed site icons in `app/` (`favicon.ico`, `icon.png`, `icon.svg`, and `apple-icon.png`) come from the generated favicon set. The matching `public/site.webmanifest` references `public/web-app-manifest-{192x192,512x512}.png`. These are the live browser, Apple, and installable web app icons; the files in this folder remain the editable brand kit. Next.js also serves the route-specific `opengraph-image.png` and `twitter-image.png` files in `app/`.
 Set `NEXT_PUBLIC_SITE_URL` to the deployed site's HTTPS origin so social previews use the correct absolute image URL. Local development defaults to `http://localhost:3000`.
-See `docs/OPEN_GRAPH.md` for the route map, generation command, and release checks.
+See `docs/open-graph.md` for the route map, generation command, and release checks.
 
 Primary colors: purple `#8000a0`, gold `#b18a48`, ink `#2b1233`, warm background `#faf7f0`. Use the transparent mark when a surface already provides its own background. Keep the mark centered and preserve its proportions. The horizontal lockup uses an Arial-compatible font for portable SVG rendering.

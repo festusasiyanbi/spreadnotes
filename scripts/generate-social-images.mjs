@@ -40,4 +40,4 @@ for (const page of Object.values(pages)) {
   }
 }
 
-console.log("Generated home, sign-in, and demo Open Graph and X preview images.");
+console.log("Generated home, sign-in, and simulation Open Graph and X preview images.");

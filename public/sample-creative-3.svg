@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="900" viewBox="0 0 900 900" role="img" aria-label="Sample carousel slide about sharing an idea">
+  <defs><linearGradient id="g" x2="1" y2="1"><stop stop-color="#69416d"/><stop offset="1" stop-color="#b785a3"/></linearGradient></defs>
+  <rect width="900" height="900" fill="url(#g)"/>
+  <circle cx="141" cy="790" r="300" fill="none" stroke="#f0d6e6" opacity=".28"/>
+  <circle cx="798" cy="102" r="180" fill="none" stroke="#f0d6e6" opacity=".28"/>
+  <text x="74" y="91" fill="#f5e2ed" font-family="Arial,sans-serif" font-size="18" letter-spacing="7">SPREADNOTES / SAMPLE</text>
+  <text x="74" y="404" fill="#fff8f0" font-family="Georgia,serif" font-size="104">Then let it</text>
+  <text x="74" y="517" fill="#f5d8ea" font-family="Georgia,serif" font-size="113" font-style="italic">travel.</text>
+  <text x="74" y="805" fill="#f5e5ef" font-family="Arial,sans-serif" font-size="20" letter-spacing="4">03 / 03</text>
+</svg>

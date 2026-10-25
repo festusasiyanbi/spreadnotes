@@ -1,8 +1,8 @@
 "use client";
 
 import { ArrowRight, Clock3 } from "lucide-react";
-import type { Post } from "../demo/store";
-import { NetworkMark } from "../platforms/NetworkMark";
+import type { Post } from "../simulation/store";
+import { NetworkMark } from "../platforms/network-mark";
 
 export function Queue({ posts, onOpenPost }: { posts: Post[]; onOpenPost: (id: string) => void }) {
   const queued = posts.filter((post) => ["scheduled", "queued", "publishing"].includes(post.status) && post.scheduledAt).sort((a, b) => (a.scheduledAt ?? "").localeCompare(b.scheduledAt ?? ""));
