@@ -5,7 +5,7 @@ import type { AdNetworkId, MediaKind, PlatformId } from "../platforms/types";
 
 export type PostStatus = "draft" | "scheduled" | "queued" | "publishing" | "published" | "partial" | "failed" | "handoff";
 export type CampaignStatus = "draft" | "scheduled" | "review" | "live" | "rejected" | "paused" | "completed" | "partial";
-export type DemoMedia = { id: string; name: string; kind: MediaKind; url: string; type: string };
+export type DemoMedia = { id: string; name: string; kind: MediaKind; url: string; type: string; altText?: string };
 export type Post = {
   id: string;
   title: string;

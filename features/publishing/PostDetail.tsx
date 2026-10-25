@@ -5,6 +5,7 @@ import { AlertCircle, ArrowLeft, ArrowRight, Copy, RotateCcw } from "lucide-reac
 import { demoId, type Post, useDemoStore } from "../demo/store";
 import { platforms } from "../platforms/catalog";
 import { NetworkMark } from "../platforms/NetworkMark";
+import { MediaGallery } from "../previews/MediaGallery";
 
 export function PostDetail({ post, onBack, onEdit, onNotice }: { post: Post; onBack: () => void; onEdit: (id: string) => void; onNotice: (message: string) => void }) {
   const upsert = useDemoStore((state) => state.upsertPost);
@@ -44,7 +45,7 @@ export function PostDetail({ post, onBack, onEdit, onNotice }: { post: Post; onB
     <button className="back-link" onClick={onBack}><ArrowLeft size={16} /> All posts</button>
     <div className="campaign-detail-heading"><div><span className="eyebrow">POST / {post.id.slice(0, 8).toUpperCase()}</span><h2>{post.title}</h2><p>Created {new Date(post.createdAt).toLocaleString()} · Demo activity only</p></div><span className={`status-pill status-${post.status}`}>{post.status}</span></div>
     <div className="post-detail-grid"><section className="panel-card padded"><span className="eyebrow">THE MASTER MESSAGE</span><p className="detail-message">{post.text}</p>
-      {post.media.length > 0 && <div className="detail-media">{post.media[0].kind === "image" || post.media[0].url.endsWith(".svg") ? <img src={post.media[0].url} alt={post.media[0].name} /> : post.media[0].kind === "video" ? <video src={post.media[0].url} controls /> : <span>{post.media[0].name}</span>}</div>}
+      {post.media.length > 0 && <div className="detail-media"><MediaGallery media={post.media} label="Post" /></div>}
       <div className="post-detail-actions">{["draft", "scheduled"].includes(post.status) ? <button className="button button-outline" onClick={() => onEdit(post.id)}>Edit post <ArrowRight size={15} /></button> : <button className="button button-outline" onClick={duplicate}>Duplicate as draft <ArrowRight size={15} /></button>}{post.status === "scheduled" && <button className="button button-primary" onClick={publishScheduled}>Run demo publish <ArrowRight size={15} /></button>}{["failed", "partial"].includes(post.status) && <button className="button button-primary" onClick={retry}><RotateCcw size={15} /> Retry failed</button>}</div>
       {post.status === "scheduled" && <div className="reschedule-box"><span className="eyebrow">MOVE THE MOMENT</span><p>Currently scheduled for {post.scheduledAt ? new Date(post.scheduledAt).toLocaleString() : "a future date"}.</p><div><input type="datetime-local" value={reschedule} onChange={(event) => setReschedule(event.target.value)} aria-label="New schedule date and time" /><button className="button button-outline small" onClick={reschedulePost}>Reschedule</button></div>{error && <span className="error-text" role="alert">{error}</span>}</div>}
     </section><section className="panel-card padded"><span className="eyebrow">CHANNEL OUTCOMES</span><h3>One post, each destination.</h3><div className="channel-result-list">{post.channels.map((id) => {
