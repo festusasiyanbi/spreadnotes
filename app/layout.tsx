@@ -5,6 +5,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   metadataBase: siteOrigin,
   applicationName: siteName,
+  manifest: "/site.webmanifest",
   title: homeTitle,
   description: homeDescription,
 };

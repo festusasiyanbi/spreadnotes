@@ -14,7 +14,7 @@ The three-stroke mark is based on the site's current CSS logo. The SVG is the ed
 | `spreadnotes-favicon-{16,32,48}.png` | Small browser-tab icons |
 | `spreadnotes-social-*-1200x630.png` | Route-specific Open Graph and social sharing previews |
 
-Next.js automatically serves the copies in `app/`: `favicon.ico`, `icon.png`, `apple-icon.png`, `opengraph-image.png`, and `twitter-image.png`.
+The installed site icons in `app/` (`favicon.ico`, `icon.png`, `icon.svg`, and `apple-icon.png`) come from the generated favicon set. The matching `public/site.webmanifest` references `public/web-app-manifest-{192x192,512x512}.png`. These are the live browser, Apple, and installable web app icons; the files in this folder remain the editable brand kit. Next.js also serves the route-specific `opengraph-image.png` and `twitter-image.png` files in `app/`.
 Set `NEXT_PUBLIC_SITE_URL` to the deployed site's HTTPS origin so social previews use the correct absolute image URL. Local development defaults to `http://localhost:3000`.
 See `docs/OPEN_GRAPH.md` for the route map, generation command, and release checks.
 
