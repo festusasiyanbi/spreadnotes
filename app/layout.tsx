@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
+import { homeDescription, homeTitle, siteName, siteOrigin } from "../features/seo/metadata";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "SpreadNotes — Make room for the good ideas.",
-  description: "One considered space to shape social content, plan posts, and prepare paid campaigns.",
+  metadataBase: siteOrigin,
+  applicationName: siteName,
+  title: homeTitle,
+  description: homeDescription,
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

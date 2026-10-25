@@ -21,6 +21,10 @@ Open the local URL printed by Next.js. Start at the public landing page, enter a
 
 No real authentication, social connection, ad submission, payment, analytics, or external AI request is performed.
 
+## Sharing previews
+
+The home, demo entry, and interactive demo routes have static Open Graph and X preview cards. See [Open Graph and social sharing](docs/OPEN_GRAPH.md) for the source files, asset generation, production URL setting, and release checks.
+
 ## Checks
 
 ```bash

@@ -24,7 +24,7 @@ export function DemoApp() {
   const [editingCampaignId, setEditingCampaignId] = useState<string | null>(null);
   const [notice, setNotice] = useState("");
 
-  useEffect(() => { if (!email) router.replace("/"); }, [email, router]);
+  useEffect(() => { if (!email) router.replace("/sign-in"); }, [email, router]);
   useEffect(() => {
     if (!notice) return;
     const timer = window.setTimeout(() => setNotice(""), 4300);

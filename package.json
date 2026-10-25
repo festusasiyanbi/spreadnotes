@@ -5,6 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "start": "next start",
+    "assets:og": "node scripts/generate-social-images.mjs",
+    "check:og": "node scripts/check-social-metadata.mjs",
     "build": "next build",
     "typecheck": "tsc --noEmit",
     "test": "node --experimental-strip-types --test tests/*.test.mjs"
@@ -23,6 +25,7 @@
     "@types/node": "latest",
     "@types/react": "latest",
     "@types/react-dom": "latest",
+    "sharp": "^0.35.5",
     "typescript": "^5.9.3"
   }
 }

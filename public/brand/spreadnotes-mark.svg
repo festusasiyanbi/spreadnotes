@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="7 12 50 50" role="img" aria-labelledby="title">
+  <title id="title">SpreadNotes mark</title>
+  <g transform="translate(21 9) scale(1.65) rotate(-14 14.5 14.5)">
+    <rect x="0" y="2" width="6" height="25" rx="3" fill="#8000a0" transform="rotate(25 3 14.5)"/>
+    <rect x="4" y="4.5" width="6" height="20" rx="3" fill="#b18a48" transform="rotate(-25 7 14.5)"/>
+    <rect x="8" y="7" width="6" height="15" rx="3" fill="#8000a0" transform="rotate(25 11 14.5)"/>
+  </g>
+</svg>

@@ -1,0 +1,32 @@
+{
+  "home": {
+    "path": "/",
+    "title": "SpreadNotes — One place to plan what you share.",
+    "description": "Draft social posts, tailor them for each channel, plan paid campaigns, and explore reporting in one clear workspace.",
+    "imageTitle": "One place to plan what you share.",
+    "imageSubtitle": "Social publishing · Campaign planning · Reporting",
+    "imageAlt": "SpreadNotes logo with the message: One place to plan what you share.",
+    "imageFile": "spreadnotes-social-card-1200x630.png",
+    "indexable": true
+  },
+  "signIn": {
+    "path": "/sign-in",
+    "title": "Explore the SpreadNotes demo",
+    "description": "Try an interactive preview of social publishing, campaign planning, and reporting in SpreadNotes. No payment or connected account required.",
+    "imageTitle": "Explore the SpreadNotes demo.",
+    "imageSubtitle": "Try the publishing workflow. No payment required.",
+    "imageAlt": "SpreadNotes logo and an invitation to explore the interactive demo.",
+    "imageFile": "spreadnotes-social-sign-in-1200x630.png",
+    "indexable": false
+  },
+  "demo": {
+    "path": "/demo",
+    "title": "SpreadNotes interactive demo",
+    "description": "Explore the SpreadNotes publishing workspace, scheduling flow, ads workspace, and sample analytics in an interactive demo.",
+    "imageTitle": "See SpreadNotes in action.",
+    "imageSubtitle": "Create, adapt, schedule, and explore sample results.",
+    "imageAlt": "SpreadNotes logo and a summary of the interactive product demo.",
+    "imageFile": "spreadnotes-social-demo-1200x630.png",
+    "indexable": false
+  }
+}

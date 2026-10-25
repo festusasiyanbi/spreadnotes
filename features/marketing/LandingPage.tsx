@@ -1,49 +1,60 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, CalendarDays, Check, ChevronRight, Layers3, Megaphone, Moon, PenLine, ShieldCheck, Sparkles } from "lucide-react";
+import { ArrowRight, CalendarDays, Check, ChartNoAxesCombined, Megaphone, PenLine } from "lucide-react";
 import { Brand } from "../shell/Brand";
 import { ThemeToggle } from "../shell/ThemeToggle";
 import { NetworkMark } from "../platforms/NetworkMark";
+
+const channels = [
+  { id: "linkedin", name: "LinkedIn" },
+  { id: "instagram", name: "Instagram" },
+  { id: "facebook", name: "Facebook" },
+  { id: "threads", name: "Threads" },
+  { id: "x", name: "X" },
+  { id: "tiktok", name: "TikTok" },
+  { id: "youtube", name: "YouTube" },
+] as const;
+
+const steps = [
+  { number: "01", icon: PenLine, title: "Create your post", description: "Write one starting draft, add media, and tailor the copy for each destination." },
+  { number: "02", icon: CalendarDays, title: "Plan what goes live", description: "Review each version, then keep scheduled posts visible in your queue and calendar." },
+  { number: "03", icon: ChartNoAxesCombined, title: "Understand the results", description: "Explore post and campaign reporting with clear, platform-specific metrics." },
+];
+
+function ProductPreview() {
+  return <div className="landing-preview" role="img" aria-label="Illustrative SpreadNotes workspace showing upcoming scheduled posts and channel-specific editing">
+    <div className="landing-preview-top"><span className="landing-preview-brand">SpreadNotes<span>.</span></span><span>Workspace preview</span></div>
+    <div className="landing-preview-body">
+      <div className="landing-preview-sidebar" aria-hidden="true"><span className="selected">Overview</span><span>Compose</span><span>Queue</span><span>Calendar</span><span>Analytics</span></div>
+      <div className="landing-preview-content">
+        <div className="landing-preview-heading"><div><small>PUBLISHING WORKSPACE</small><strong>Good morning, Alex</strong><span>Everything in one clear view.</span></div><span className="landing-preview-create">+ New post</span></div>
+        <div className="landing-preview-columns">
+          <div className="landing-preview-panel"><div className="landing-preview-panel-title"><span>Upcoming posts</span><span>View queue →</span></div><div className="landing-preview-post"><span className="landing-preview-date">MON<br /><strong>27</strong></span><div><strong>Behind the next big idea</strong><small>9:00 AM · LinkedIn, Instagram</small></div><span className="landing-preview-status">Scheduled</span></div><div className="landing-preview-post"><span className="landing-preview-date">WED<br /><strong>29</strong></span><div><strong>A note from the studio</strong><small>11:30 AM · Threads, Facebook</small></div><span className="landing-preview-status">Scheduled</span></div></div>
+          <div className="landing-preview-panel landing-preview-note"><span>One idea, every channel</span><p>Write once. Make each version feel right where it appears.</p><div className="landing-preview-networks"><NetworkMark id="linkedin" /><NetworkMark id="instagram" /><NetworkMark id="threads" /></div></div>
+        </div>
+      </div>
+    </div>
+  </div>;
+}
 
 export function LandingPage() {
   return <div className="marketing-page">
     <header className="marketing-header"><div className="marketing-container header-inner">
       <Brand />
-      <nav aria-label="Main navigation"><a href="#how-it-works">How it works</a><a href="#channels">Channels</a><a href="#ads">Ads workspace</a></nav>
-      <div className="header-actions"><ThemeToggle label={false} /><Link className="text-action" href="/sign-in">Sign in</Link><Link className="button button-dark small" href="/sign-in">Explore the demo <ArrowRight size={15} /></Link></div>
+      <nav aria-label="Main navigation"><a href="#how-it-works">How it works</a><a href="#channels">Channels</a><a href="#ads-reporting">Ads & reporting</a></nav>
+      <div className="header-actions"><ThemeToggle label={false} /><Link className="marketing-sign-in" href="/sign-in">Sign in</Link><Link className="button button-primary small" href="/sign-in"><span className="landing-header-cta-long">Explore demo</span><span className="landing-header-cta-short">Demo</span><ArrowRight size={15} /></Link></div>
     </div></header>
     <main>
-      <section className="hero marketing-container">
-        <div className="hero-copy">
-          <div className="eyebrow"><span className="eyebrow-line" /> A BETTER WAY TO SHOW UP</div>
-          <h1>Make room for the <em>good ideas.</em></h1>
-          <p className="hero-description">One considered space to shape your content, tailor it for every channel, and plan what goes live next. Posts and paid campaigns, brought into focus.</p>
-          <div className="hero-actions"><Link className="button button-primary" href="/sign-in">Explore the interactive demo <ArrowRight size={17} /></Link><a className="underline-link" href="#how-it-works">See how it works <ChevronRight size={17} /></a></div>
-          <div className="hero-footnote"><span className="dot" /> FRONTEND DEMO · NO ACCOUNT OR PAYMENT REQUIRED</div>
-        </div>
-        <div className="hero-visual" aria-label="Illustration of the SpreadNotes publishing workspace">
-          <div className="hero-visual-heading"><span className="tiny-label">YOUR PUBLISHING DESK</span><span className="hero-visual-date">A calmer way to create ↗</span></div>
-          <div className="hero-art-text">A thought worth sharing<br /><em>deserves a little space.</em></div>
-          <div className="hero-art-bottom"><span>01 / 03</span><div className="hero-art-dots"><i /><i /><i /></div></div>
-          <div className="hero-floating-card"><div className="floating-icon"><Layers3 size={19} /></div><div><strong>One idea, many places</strong><small>Tailor each version with care</small></div><Check size={17} /></div>
-        </div>
+      <section className="landing-hero marketing-container">
+        <div className="landing-hero-copy"><span className="landing-kicker">YOUR SOCIAL PUBLISHING WORKSPACE</span><h1>One place to plan what you share.</h1><p>Draft posts, tailor them for each channel, and see what is coming next. Bring paid campaigns and reporting into the same clear workflow.</p><Link className="button button-primary" href="/sign-in">Explore the interactive demo <ArrowRight size={17} /></Link><span className="landing-demo-note">Interactive preview · No account or payment required</span></div>
+        <ProductPreview />
       </section>
-      <div className="marquee-line"><div className="marketing-container"><span>CREATE</span><i>✳</i><span>ADAPT</span><i>✳</i><span>SCHEDULE</span><i>✳</i><span>SHOW UP</span></div></div>
-      <section id="how-it-works" className="marketing-section marketing-container">
-        <div className="section-heading"><div><span className="eyebrow">THE WORKFLOW</span><h2>Less tab-hopping.<br /><em>More momentum.</em></h2></div><p>Move an idea from the first sentence to its next destination without losing the thread.</p></div>
-        <div className="feature-grid">
-          <article className="feature-card"><span className="feature-number">01</span><div className="feature-icon"><PenLine size={25} /></div><h3>Write once, shape for each.</h3><p>Start with a master post, then fine-tune the words and media for the channels you choose.</p><span className="feature-rule" /></article>
-          <article className="feature-card"><span className="feature-number">02</span><div className="feature-icon"><CalendarDays size={25} /></div><h3>See what comes next.</h3><p>Put drafts and scheduled content into a clear calendar. Know what is ready and what needs attention.</p><span className="feature-rule" /></article>
-          <article className="feature-card"><span className="feature-number">03</span><div className="feature-icon"><Megaphone size={25} /></div><h3>Plan your paid reach.</h3><p>Prepare campaigns with budgets, dates, and platform-specific creative in a dedicated Ads workspace.</p><span className="feature-rule" /></article>
-        </div>
-      </section>
-      <section id="channels" className="channels-section"><div className="marketing-container channels-inner"><div><span className="eyebrow">THE CHANNELS</span><h2>One home for your<br /><em>many voices.</em></h2><p>Explore a post across seven social channels. Each version can have its own wording and a clear preview before it goes anywhere.</p><Link className="underline-link" href="/sign-in">Try the composer <ArrowRight size={16} /></Link></div><div className="channel-board">
-        {(["linkedin", "instagram", "facebook", "threads", "x", "tiktok", "youtube"] as const).map((id) => <div key={id} className="channel-tile"><NetworkMark id={id} size="large" /><span>{{ linkedin: "LinkedIn", instagram: "Instagram", facebook: "Facebook", threads: "Threads", x: "X", tiktok: "TikTok", youtube: "YouTube" }[id]}</span></div>)}
-      </div></div></section>
-      <section id="ads" className="ads-section marketing-container"><div className="ads-art"><div className="ads-art-orbit one" /><div className="ads-art-orbit two" /><span className="tiny-label">PAID CAMPAIGNS · A CLEARER VIEW</span><div className="ads-art-card"><div className="ads-card-top"><span>CAMPAIGN OVERVIEW</span><Megaphone size={18} /></div><h3>Launch with intention.</h3><div className="ads-card-progress"><i /></div><div className="ads-card-footer"><span>Meta Ads</span><span>LinkedIn Ads</span><span>TikTok Ads</span></div></div></div><div className="ads-copy"><span className="eyebrow">BEYOND ORGANIC</span><h2>Content and campaigns, <em>in one place.</em></h2><p>Build a separate plan for paid reach. Choose your ad accounts, set budgets and run dates per network, then follow each campaign through review and delivery.</p><div className="ads-note"><ShieldCheck size={18} /><span>Ad spend stays with the connected advertising platforms. The demo never submits or charges for an ad.</span></div><Link className="button button-outline" href="/sign-in">Explore the Ads workspace <ArrowRight size={16} /></Link></div></section>
-      <section className="marketing-cta"><div className="marketing-container"><div><span className="eyebrow">YOUR NEXT IDEA IS WAITING</span><h2>A little more clarity.<br /><em>A lot more possibility.</em></h2></div><Link className="button button-light" href="/sign-in">Open the demo <ArrowRight size={17} /></Link></div></section>
+      <section id="how-it-works" className="landing-section marketing-container"><div className="landing-section-heading"><span className="landing-kicker">HOW IT WORKS</span><h2>From idea to insight.</h2><p>The tools you need to plan thoughtfully, without losing track of the details.</p></div><div className="landing-steps">{steps.map(({ number, icon: Icon, title, description }) => <article key={number} className="landing-step"><div className="landing-step-top"><span>{number}</span><Icon size={21} strokeWidth={1.8} aria-hidden="true" /></div><h3>{title}</h3><p>{description}</p></article>)}</div></section>
+      <section id="channels" className="landing-channels"><div className="marketing-container"><div className="landing-section-heading"><span className="landing-kicker">CHANNELS</span><h2>Make every version count.</h2><p>Preview and adapt posts for each social channel before scheduling them.</p></div><div className="landing-channel-list">{channels.map(({ id, name }) => <div key={id} className="landing-channel"><NetworkMark id={id} /><span>{name}</span></div>)}</div></div></section>
+      <section id="ads-reporting" className="landing-section marketing-container"><div className="landing-section-heading"><span className="landing-kicker">MORE THAN PUBLISHING</span><h2>Plan the full picture.</h2><p>Keep organic content and paid work distinct, with a clear view of both.</p></div><div className="landing-more-grid"><article><Megaphone size={24} strokeWidth={1.7} aria-hidden="true" /><h3>Ads workspace</h3><p>Prepare website traffic campaigns for Meta, LinkedIn, and TikTok with network-specific creative, budgets, and dates.</p><span><Check size={15} /> Review each network before submission</span></article><article><ChartNoAxesCombined size={24} strokeWidth={1.7} aria-hidden="true" /><h3>Reporting</h3><p>Examine post and campaign results by platform, using only metrics that each connection can provide.</p><span><Check size={15} /> Organic and paid views stay separate</span></article></div><p className="landing-demo-disclosure">The interactive demo simulates publishing, ad delivery, and analytics. It does not connect accounts, publish posts, or spend money.</p></section>
+      <section className="landing-cta"><div className="marketing-container"><div><h2>See how it all comes together.</h2><p>Explore the SpreadNotes workflow in the interactive demo.</p></div><Link className="button button-primary" href="/sign-in">Open the demo <ArrowRight size={17} /></Link></div></section>
     </main>
-    <footer className="marketing-footer marketing-container"><Brand compact /><span>© {new Date().getFullYear()} SpreadNotes · A separate product in the making.</span><Link href="/sign-in">Interactive demo <ArrowRight size={15} /></Link></footer>
+    <footer className="marketing-footer marketing-container"><Brand compact /><span>© {new Date().getFullYear()} SpreadNotes</span><Link href="/sign-in">Interactive demo <ArrowRight size={15} /></Link></footer>
   </div>;
 }
