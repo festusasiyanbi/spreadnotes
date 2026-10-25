@@ -10,7 +10,11 @@ export type Platform = {
   supports: MediaKind[];
   maxImages: number;
   limit: number;
-  postingMode: "direct" | "manual";
+  postingMode: "direct";
+  accountRequirement: string;
+  publishingRequirement: string;
+  analyticsRequirement: string;
+  apiReference: string;
 };
 
 export type AdNetwork = {

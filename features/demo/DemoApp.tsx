@@ -10,6 +10,7 @@ import { PostsLibrary } from "../publishing/PostsLibrary";
 import { CalendarView } from "../calendar/CalendarView";
 import { Connections } from "../connections/Connections";
 import { AdsWorkspace } from "../ads/AdsWorkspace";
+import { Analytics } from "../analytics/Analytics";
 import { Settings } from "../settings/Settings";
 import { useDemoStore } from "./store";
 
@@ -42,11 +43,12 @@ export function DemoApp() {
   function editPost(id: string) { setEditingPostId(id); setView("compose"); }
   function openCampaign(id: string) { setEditingCampaignId(id); setView("ads"); }
   const content = {
-    home: <Dashboard onNavigate={navigate} onOpenPost={openPost} onOpenCampaign={openCampaign} />,
+    home: <Dashboard onNavigate={navigate} onOpenPost={openPost} onOpenCampaign={openCampaign} onEditPost={editPost} />,
     compose: <PostComposer key={editingPostId ?? "new"} postId={editingPostId} onNavigate={navigate} onNotice={setNotice} />,
     calendar: <CalendarView onOpenPost={openPost} onOpenCampaign={openCampaign} onNavigate={navigate} />,
     library: <PostsLibrary postId={selectedPostId} onEditPost={editPost} onNavigate={navigate} onNotice={setNotice} />,
     ads: <AdsWorkspace key={editingCampaignId ?? "ads"} campaignId={editingCampaignId} onOpenCampaign={openCampaign} onNavigate={navigate} onNotice={setNotice} />,
+    analytics: <Analytics onOpenPost={openPost} onOpenCampaign={openCampaign} />,
     connections: <Connections />,
     settings: <Settings onNotice={setNotice} />,
   } satisfies Record<AppView, React.ReactNode>;

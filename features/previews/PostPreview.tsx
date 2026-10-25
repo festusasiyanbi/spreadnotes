@@ -14,12 +14,12 @@ const actions = {
   youtube: [{ label: "Like", icon: ThumbsUp }, { label: "Comment", icon: MessageCircle }, { label: "Share", icon: Share2 }],
 } satisfies Record<PlatformId, { label: string; icon: typeof Heart }[]>;
 
-export function PostPreview({ platform, text, media }: { platform?: Platform; text: string; media: DemoMedia[] }) {
+export function PostPreview({ platform, text, media, youtubeTitle }: { platform?: Platform; text: string; media: DemoMedia[]; youtubeTitle?: string }) {
   const id = platform?.id ?? "linkedin";
   const mediaFirst = id === "instagram" || id === "tiktok" || id === "youtube";
   const images = media.filter((item) => item.kind === "image").length;
   const format = images > 1 ? id === "linkedin" ? "MULTI-IMAGE POST" : id === "tiktok" ? "PHOTO POST" : id === "x" || id === "facebook" ? "MULTI-PHOTO POST" : "CAROUSEL POST" : media[0]?.kind === "video" ? "VIDEO POST" : media[0]?.kind === "document" ? "DOCUMENT POST" : media.length ? "IMAGE POST" : "TEXT POST";
-  const copy = <p className="post-preview-text">{text || "Your words will appear here as you write."}</p>;
+  const copy = <>{id === "youtube" && <strong className="youtube-preview-title">{youtubeTitle || "Your video title"}</strong>}<p className="post-preview-text">{text || "Your words will appear here as you write."}</p></>;
   const visual = media.length ? <div className="post-preview-media"><MediaGallery key={`${id}-${media.map((item) => item.id).join("-")}`} media={media} label={platform?.name ?? "Post"} /></div> : <div className="post-preview-placeholder"><span>SHARE<br />THE<br /><em>THOUGHT.</em></span><span>SPREADNOTES / DEMO</span></div>;
 
   return <div className={`post-preview post-preview-${id}`}>

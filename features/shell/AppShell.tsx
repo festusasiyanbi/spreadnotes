@@ -1,18 +1,19 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowUpRight, CalendarDays, ChevronDown, CircleHelp, LayoutDashboard, Link2, Megaphone, Menu, PenLine, Settings2, X, Layers3 } from "lucide-react";
+import { ArrowUpRight, BarChart3, CalendarDays, ChevronDown, CircleHelp, LayoutDashboard, Link2, Megaphone, Menu, PenLine, Settings2, X, Layers3 } from "lucide-react";
 import { useDemoStore } from "../demo/store";
 import { Brand } from "./Brand";
 import { ThemeToggle } from "./ThemeToggle";
 
-export type AppView = "home" | "compose" | "calendar" | "library" | "ads" | "connections" | "settings";
+export type AppView = "home" | "compose" | "calendar" | "library" | "ads" | "analytics" | "connections" | "settings";
 const links: { id: AppView; name: string; icon: typeof PenLine; group: "main" | "workspace" }[] = [
   { id: "home", name: "Overview", icon: LayoutDashboard, group: "main" },
   { id: "compose", name: "Create post", icon: PenLine, group: "main" },
   { id: "calendar", name: "Calendar", icon: CalendarDays, group: "main" },
   { id: "library", name: "Post library", icon: Layers3, group: "main" },
   { id: "ads", name: "Ads workspace", icon: Megaphone, group: "main" },
+  { id: "analytics", name: "Analytics", icon: BarChart3, group: "main" },
   { id: "connections", name: "Connections", icon: Link2, group: "workspace" },
   { id: "settings", name: "Settings", icon: Settings2, group: "workspace" },
 ];
@@ -22,6 +23,7 @@ const titles: Record<AppView, { eyebrow: string; title: string; description: str
   calendar: { eyebrow: "YOUR CALENDAR", title: "The shape of your week.", description: "See what’s scheduled, and give each idea its moment." },
   library: { eyebrow: "POST LIBRARY", title: "Everything you’ve made.", description: "Find a draft, revisit a post, or pick up where you left off." },
   ads: { eyebrow: "PAID CAMPAIGNS", title: "Plan your reach.", description: "Build and follow campaigns across your ad accounts." },
+  analytics: { eyebrow: "SAMPLE INSIGHTS", title: "See what resonates.", description: "Explore organic and paid performance with clearly labelled sample data." },
   connections: { eyebrow: "YOUR CHANNELS", title: "Connected accounts.", description: "Choose which social and ad accounts to use in the demo." },
   settings: { eyebrow: "PREFERENCES", title: "Make it yours.", description: "Your workspace details and appearance in one place." },
 };
