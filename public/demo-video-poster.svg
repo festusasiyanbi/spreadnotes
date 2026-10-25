@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1600" role="img" aria-label="Sample video concept poster">
+  <defs><linearGradient id="g" x2="1" y2="1"><stop stop-color="#271733"/><stop offset=".55" stop-color="#7d4b8b"/><stop offset="1" stop-color="#d5a8bd"/></linearGradient></defs>
+  <rect width="900" height="1600" fill="url(#g)"/>
+  <circle cx="900" cy="50" r="600" fill="none" stroke="#e6c6e8" stroke-width="3" opacity=".45"/>
+  <circle cx="0" cy="1540" r="650" fill="none" stroke="#e6c6e8" stroke-width="3" opacity=".45"/>
+  <text x="80" y="145" font-family="Arial,sans-serif" font-size="28" letter-spacing="7" fill="#eee0ee">SPREADNOTES / DEMO</text>
+  <text x="80" y="760" font-family="Georgia,serif" font-size="115" fill="#fffaf7">Give the idea</text>
+  <text x="80" y="885" font-family="Georgia,serif" font-style="italic" font-size="125" fill="#fffaf7">room to grow.</text>
+  <circle cx="450" cy="1155" r="80" fill="#faf7f0" opacity=".93"/>
+  <path d="M425 1105v100l82-50z" fill="#593263"/>
+  <text x="80" y="1505" font-family="Arial,sans-serif" font-size="28" letter-spacing="6" fill="#fffaf7">SAMPLE VIDEO CONCEPT · NO PLAYBACK</text>
+</svg>
