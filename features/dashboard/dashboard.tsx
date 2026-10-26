@@ -8,14 +8,12 @@ import { NetworkMark } from "../platforms/network-mark";
 import type { AppView } from "../shell/app-shell";
 
 export function Dashboard({ onNavigate, onOpenPost, onOpenCampaign, onEditPost }: { onNavigate: (view: AppView) => void; onOpenPost: (id: string) => void; onOpenCampaign: (id: string) => void; onEditPost: (id: string) => void }) {
-  const { displayName, connected, adConnected, posts, campaigns, onboardingDismissed, setOnboardingDismissed } = useSimulationStore();
-  const firstName = displayName.split(" ")[0] || "there";
+  const { connected, adConnected, posts, campaigns, onboardingDismissed, setOnboardingDismissed } = useSimulationStore();
   const scheduled = posts.filter((post) => post.status === "scheduled").length;
   const ready = posts.filter((post) => post.status === "draft").length;
   const activeAds = campaigns.filter((campaign) => ["scheduled", "review", "live"].includes(campaign.status)).length;
   const setup = [{ done: connected.length > 0, text: "Choose a social account", view: "connections" as const }, { done: posts.length > 0, text: "Create your first post", view: "compose" as const }, { done: scheduled > 0, text: "Plan a publishing time", view: "calendar" as const }];
   return <div className="dashboard-page">
-    <section className="welcome-panel"><div className="welcome-copy"><span className="eyebrow">GOOD TO SEE YOU, {firstName.toUpperCase()}</span><h2>Your next idea has<br /><em>somewhere to go.</em></h2><p>Begin with a thought, shape it for the right channels, and decide when the world should see it.</p><button className="button button-light" onClick={() => onNavigate("compose")}>Create a post <ArrowRight size={17} /></button></div><div className="welcome-art" aria-hidden="true"><span className="welcome-star">✳</span><div className="welcome-note">A little<br />more intention.</div><div className="welcome-rule" /></div></section>
     <div className="metric-grid">
       <button onClick={() => onNavigate("library")} className="metric-card"><span><PenLine size={18} /> DRAFTS</span><strong>{ready.toString().padStart(2, "0")}</strong><small>Ideas in progress <ArrowRight size={14} /></small></button>
       <button onClick={() => onNavigate("calendar")} className="metric-card"><span><CalendarDays size={18} /> SCHEDULED</span><strong>{scheduled.toString().padStart(2, "0")}</strong><small>Posts on the calendar <ArrowRight size={14} /></small></button>

@@ -11,6 +11,8 @@ export type SimulationMedia = { id: string; name: string; kind: MediaKind; url: 
 export type GeoSelection = { countryCode: string; countryName: string; stateId?: string; stateName?: string; cityId?: string; cityName?: string };
 export type AgeTarget = { min?: number; max?: number; groups?: string[] };
 export type SocialProfile = { name: string; username: string };
+export type AiOrigin = { kind: "post"; id: string; field: "text" | "variant"; channel?: PlatformId } | { kind: "campaign"; field: "creative" | "networkCreative"; network?: AdNetworkId };
+export type AiSession = { origin?: AiOrigin; original: string; brief: string; channels: PlatformId[]; networks: AdNetworkId[]; suggestion: string; sourcePostIds: string[]; feedback: "useful" | "off-target" | null; generation: number; mode: "create" | "rewrite"; target: "post" | "campaign" };
 export type Post = {
   id: string;
   title: string;
@@ -56,6 +58,7 @@ export type Campaign = {
   startAt: string;
   endAt: string;
   creative: string;
+  writingContext?: { profileVersion: number; sourcePostIds: string[] };
   media: SimulationMedia | null;
   status: CampaignStatus;
   networkStatus: Partial<Record<AdNetworkId, CampaignStatus>>;
@@ -71,6 +74,7 @@ type SimulationState = {
   connected: PlatformId[];
   socialProfiles: Partial<Record<PlatformId, SocialProfile>>;
   adConnected: AdNetworkId[];
+  adAccountNames: Partial<Record<AdNetworkId, string>>;
   connectionStates: Partial<Record<PlatformId, ConnectionState>>;
   adConnectionStates: Partial<Record<AdNetworkId, ConnectionState>>;
   weeklySlots: { day: number; time: string }[];
@@ -79,6 +83,9 @@ type SimulationState = {
   writingProfile: { enabled: boolean; topics: string; audience: string; goals: string; voice: string; preferredTerms: string; bannedTerms: string; examplePostIds: string[]; excludedPostIds: string[] };
   posts: Post[];
   campaigns: Campaign[];
+  aiSession: AiSession | null;
+  aiArea: "create" | "rewrite" | "voice";
+  aiCampaignDraft: Partial<Campaign> | null;
   activeWorkspaceId: string;
   savedWorkspaces: Record<string, WorkspaceSnapshot>;
   createWorkspace: (name: string) => void;
@@ -90,12 +97,16 @@ type SimulationState = {
   setOnboardingStep: (step: number) => void;
   toggleConnection: (id: PlatformId) => void;
   toggleAdConnection: (id: AdNetworkId) => void;
+  setAdAccountName: (id: AdNetworkId, name: string) => void;
   setConnectionState: (id: PlatformId, value: ConnectionState) => void;
   setAdConnectionState: (id: AdNetworkId, value: ConnectionState) => void;
   setWeeklySlots: (slots: { day: number; time: string }[]) => void;
   setTimezone: (value: string) => void;
   setOnboardingDismissed: (value: boolean) => void;
   setWritingProfile: (value: Partial<SimulationState["writingProfile"]>) => void;
+  setAiSession: (value: AiSession | null) => void;
+  setAiArea: (value: SimulationState["aiArea"]) => void;
+  setAiCampaignDraft: (value: Partial<Campaign> | null) => void;
   upsertPost: (post: Post) => void;
   upsertPostForWorkspace: (workspaceId: string, post: Post) => void;
   removePost: (id: string) => void;
@@ -107,8 +118,8 @@ type SimulationState = {
   reset: () => void;
 };
 
-type WorkspaceSnapshot = Pick<SimulationState, "workspaceName" | "onboardingStep" | "connected" | "socialProfiles" | "adConnected" | "connectionStates" | "adConnectionStates" | "weeklySlots" | "timezone" | "onboardingDismissed" | "writingProfile" | "posts" | "campaigns">;
-const workspaceKeys = ["workspaceName", "onboardingStep", "connected", "socialProfiles", "adConnected", "connectionStates", "adConnectionStates", "weeklySlots", "timezone", "onboardingDismissed", "writingProfile", "posts", "campaigns"] as const;
+type WorkspaceSnapshot = Pick<SimulationState, "workspaceName" | "onboardingStep" | "connected" | "socialProfiles" | "adConnected" | "adAccountNames" | "connectionStates" | "adConnectionStates" | "weeklySlots" | "timezone" | "onboardingDismissed" | "writingProfile" | "posts" | "campaigns" | "aiSession" | "aiArea" | "aiCampaignDraft">;
+const workspaceKeys = ["workspaceName", "onboardingStep", "connected", "socialProfiles", "adConnected", "adAccountNames", "connectionStates", "adConnectionStates", "weeklySlots", "timezone", "onboardingDismissed", "writingProfile", "posts", "campaigns", "aiSession", "aiArea", "aiCampaignDraft"] as const;
 function snapshot(state: SimulationState): WorkspaceSnapshot {
   return Object.fromEntries(workspaceKeys.map((key) => [key, state[key]])) as WorkspaceSnapshot;
 }
@@ -121,6 +132,7 @@ const initial = () => ({
   connected: [] as PlatformId[],
   socialProfiles: {} as Partial<Record<PlatformId, SocialProfile>>,
   adConnected: [] as AdNetworkId[],
+  adAccountNames: {} as Partial<Record<AdNetworkId, string>>,
   connectionStates: {} as Partial<Record<PlatformId, ConnectionState>>,
   adConnectionStates: {} as Partial<Record<AdNetworkId, ConnectionState>>,
   weeklySlots: [{ day: 1, time: "09:00" }, { day: 3, time: "09:00" }, { day: 5, time: "09:00" }],
@@ -129,6 +141,9 @@ const initial = () => ({
   writingProfile: { enabled: false, topics: "", audience: "", goals: "", voice: "", preferredTerms: "", bannedTerms: "", examplePostIds: [] as string[], excludedPostIds: [] as string[] },
   posts: [] as Post[],
   campaigns: [] as Campaign[],
+  aiSession: null as AiSession | null,
+  aiArea: "create" as const,
+  aiCampaignDraft: null as Partial<Campaign> | null,
   activeWorkspaceId: "workspace-default",
   savedWorkspaces: {} as Record<string, WorkspaceSnapshot>,
 });
@@ -152,12 +167,16 @@ export const useSimulationStore = create<SimulationState>((set) => ({
   setOnboardingStep: (onboardingStep) => set({ onboardingStep }),
   toggleConnection: (id) => set((state) => ({ connected: state.connected.includes(id) ? state.connected.filter((item) => item !== id) : [...state.connected, id] })),
   toggleAdConnection: (id) => set((state) => ({ adConnected: state.adConnected.includes(id) ? state.adConnected.filter((item) => item !== id) : [...state.adConnected, id] })),
+  setAdAccountName: (id, name) => set((state) => ({ adAccountNames: { ...state.adAccountNames, [id]: name } })),
   setConnectionState: (id, value) => set((state) => ({ connectionStates: { ...state.connectionStates, [id]: value } })),
   setAdConnectionState: (id, value) => set((state) => ({ adConnectionStates: { ...state.adConnectionStates, [id]: value } })),
   setWeeklySlots: (weeklySlots) => set({ weeklySlots }),
   setTimezone: (timezone) => set({ timezone }),
   setOnboardingDismissed: (onboardingDismissed) => set({ onboardingDismissed }),
   setWritingProfile: (value) => set((state) => ({ writingProfile: { ...state.writingProfile, ...value } })),
+  setAiSession: (aiSession) => set({ aiSession }),
+  setAiArea: (aiArea) => set({ aiArea }),
+  setAiCampaignDraft: (aiCampaignDraft) => set({ aiCampaignDraft }),
   upsertPost: (post) => set((state) => ({ posts: [post, ...state.posts.filter((item) => item.id !== post.id)] })),
   upsertPostForWorkspace: (workspaceId, post) => set((state) => {
     if (workspaceId === state.activeWorkspaceId) return { posts: [post, ...state.posts.filter((item) => item.id !== post.id)] };

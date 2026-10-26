@@ -12,6 +12,7 @@ import { Connections } from "../connections/connections";
 import { AdsWorkspace } from "../ads/ads-workspace";
 import { Analytics } from "../analytics/analytics";
 import { Settings } from "../settings/settings";
+import { AiHub } from "../ai/ai-hub";
 import { useSimulationStore } from "./store";
 
 export function SimulationApp() {
@@ -22,6 +23,7 @@ export function SimulationApp() {
   const [editingPostId, setEditingPostId] = useState<string | null>(null);
   const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
   const [editingCampaignId, setEditingCampaignId] = useState<string | null>(null);
+  const [campaignFromAi, setCampaignFromAi] = useState(false);
   const [notice, setNotice] = useState("");
 
   useEffect(() => { if (!email) router.replace("/sign-in"); }, [email, router]);
@@ -37,20 +39,22 @@ export function SimulationApp() {
     setView(next);
     if (next === "compose") setEditingPostId(null);
     if (next === "library") setSelectedPostId(null);
-    if (next === "ads") setEditingCampaignId(null);
+    if (next === "ads") { setEditingCampaignId(null); setCampaignFromAi(false); }
   }
   function openPost(id: string) { setSelectedPostId(id); setView("library"); }
   function editPost(id: string) { setEditingPostId(id); setView("compose"); }
-  function openCampaign(id: string) { setEditingCampaignId(id); setView("ads"); }
+  function openCampaign(id: string) { setEditingCampaignId(id); setCampaignFromAi(false); setView("ads"); }
+  function returnToCampaign(id?: string) { setEditingCampaignId(id ?? null); setCampaignFromAi(!id); setView("ads"); }
   const content = {
     home: <Dashboard onNavigate={navigate} onOpenPost={openPost} onOpenCampaign={openCampaign} onEditPost={editPost} />,
     compose: <PostComposer key={editingPostId ?? "new"} postId={editingPostId} onNavigate={navigate} onNotice={setNotice} />,
+    ai: <AiHub onOpenPost={editPost} onOpenCampaign={returnToCampaign} />,
     calendar: <CalendarView onOpenPost={openPost} onOpenCampaign={openCampaign} onNavigate={navigate} />,
     library: <PostsLibrary postId={selectedPostId} onEditPost={editPost} onNavigate={navigate} onNotice={setNotice} />,
-    ads: <AdsWorkspace key={editingCampaignId ?? "ads"} campaignId={editingCampaignId} onOpenCampaign={openCampaign} onNavigate={navigate} onNotice={setNotice} />,
+    ads: <AdsWorkspace key={editingCampaignId ?? "ads"} campaignId={editingCampaignId} resumeAiDraft={campaignFromAi} onOpenCampaign={openCampaign} onNavigate={navigate} onNotice={setNotice} />,
     analytics: <Analytics onOpenPost={openPost} onOpenCampaign={openCampaign} />,
     connections: <Connections />,
-    settings: <Settings onNotice={setNotice} />,
+    settings: <Settings onNotice={setNotice} onNavigate={navigate} />,
   } satisfies Record<AppView, React.ReactNode>;
   return <AppShell view={view} onNavigate={navigate}>{content[view]}{notice && <div className="toast" role="status">{notice}</div>}</AppShell>;
 }

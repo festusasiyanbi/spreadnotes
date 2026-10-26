@@ -33,7 +33,7 @@ The current project is an interactive, frontend-only simulation. The carousel an
 
 ## Phase 3 — Schedule and account settings
 
-- [x] Split settings into General, Connections, Publishing, Schedule, Writing profile, and Workspace.
+- [x] Split settings into General, Connections, Publishing, Schedule, Writing profile, and Workspace. Writing profile in Settings links to its controls in SpreadNotes AI.
 - [ ] Give each social account a status, owner, permissions summary, reconnection action, and disconnect flow. Simulation status and prerequisite summaries are present; real owner and OAuth flows remain backend work.
 - [ ] Add account-specific posting defaults and weekly time slots with an explicit timezone. Weekly slots use the device timezone; account-specific defaults remain.
 - [x] Let a user choose an exact time or the next available slot, with a final preview of resolved delivery times.
@@ -54,11 +54,11 @@ The current project is an interactive, frontend-only simulation. The carousel an
 
 ## Phase 5 — AI writing assistance
 
-- [x] Add an opt-in Writing profile: topics, audience, goals, tone, preferred terms, banned terms, and selected example posts.
+- [x] Add an opt-in Voice profile in SpreadNotes AI: topics, audience, goals, tone, preferred terms, banned terms, and selected example posts. Basic local assistance works without it.
 - [x] Show which prior SpreadNotes posts are eligible as examples and let users remove them.
 - [ ] Generate a small batch of ideas on demand, then channel variants on demand.
-- [x] Keep saved suggestions editable and in "needs approval" until a user explicitly approves them.
-- [ ] Provide regenerate, discard, and useful/off-target feedback; disclose when there is too little history for voice matching.
+- [x] Require explicit insertion into the originating text field or creation of an editable draft. Previously created "needs approval" suggestions remain accessible; new suggestions no longer use that status.
+- [x] Provide regenerate, discard, and useful/off-target feedback in the local writing hub; disclose when no eligible example posts are available.
 - [x] Record the profile version and source post IDs for saved suggestions without exposing examples in public output.
 - [ ] Add per-workspace request quotas, token ceilings, cancellation, result caching, and cost monitoring before enabling a paid model.
 
@@ -79,9 +79,18 @@ The current project is an interactive, frontend-only simulation. The carousel an
 ## Organic and paid analytics UI
 
 - [x] Provide a distinct Analytics area for organic posts and Meta, LinkedIn, and TikTok ads, with account filters, date ranges, a sample trend, and post or campaign detail.
+- [x] Filter organic sample reports by platform, date, title, and publishing source. Include clearly labelled examples of posts published directly on connected platforms and an expandable per-post metric breakdown.
 - [x] Use platform capability maps to show only supported sample metrics and explain permission, format, and reporting-window limits.
 - [x] Keep simulated spend and performance clearly labelled; do not combine platform-specific view or click definitions into one cross-network total.
-- [ ] Replace sample reports with approved, cached platform reporting adapters when the backend is built.
+- [ ] Replace sample reports with approved, cached platform reporting adapters when the backend is built. Retrieve owned native posts only when that platform and account grant history access; deduplicate by platform post ID and retain source, account, metric availability, and last-updated timestamps. LinkedIn member history needs restricted Community Management access; TikTok's current video path must not be presented as photo-post reporting.
+
+## Workspace and account connection UI
+
+- [x] Keep the workspace screens compact: page headings and actions replace large decorative welcome, ads, and AI banners; staging keeps a small header badge.
+- [x] Use shared field colors and focus states in both themes, and constrain long calendar titles to their card.
+- [x] Explain that ad accounts need separate provider authorization, account selection, reporting access, and campaign management access. The sample account picker and connection states remain local to each workspace.
+- [x] Keep AI ad-copy insertion in an editable campaign draft. Existing network-specific copy stays intact, is labelled in review, and can be reset to the new shared copy.
+- [ ] Add real provider authorization and server-side token storage only after platform approvals and the backend are ready. Never collect provider passwords.
 
 ## Cost discipline
 

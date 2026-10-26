@@ -9,7 +9,9 @@ npm install
 npm run dev
 ```
 
-Open `/` for the public site and `/workspace` for the interactive workspace. `/sign-in` asks for a name and offers email/password, Google, and magic-link simulations before workspace creation. Passwords are not verified or stored, Google is not contacted, and magic links are not sent. The public “Request a demo” form confirms that a request was **not sent**. Data lives in browser memory for the current visit and resets on reload.
+Open `http://localhost:3000/` for the public site and `http://staging.localhost:3000/` for the interactive workspace. The public sign-in link leads to local staging. Sign-in asks for a name and offers email/password, Google, and magic-link simulations before workspace creation. Passwords are not verified or stored, Google is not contacted, and magic links are not sent. The public “Request a demo” form confirms that a request was **not sent**. Data lives in browser memory for the current visit and resets on reload.
+
+SpreadNotes AI is the workspace writing studio. Create and Rewrite produce deterministic local text suggestions for posts and ad copy. The composer and ads builder open that studio with their current text and return only an explicitly inserted suggestion to the originating field. Voice profile and published-post examples are managed in the studio; basic writing help works without them. No AI provider is contacted, and no suggestion is sent to a social or ad platform automatically.
 
 ## Explore
 
@@ -29,7 +31,7 @@ The app supports up to 10 media items in a post, subject to each selected channe
 | `app.spreadnotes.app` | Interactive workspace |
 | `staging.spreadnotes.app` | Labelled test workspace |
 
-Root `proxy.ts` maps app and staging roots to the internal `/workspace` route and redirects the former `/demo` path to staging. This routing does not enforce access control. Both product hosts show the same simulation until a backend is connected. See [Open Graph and social sharing](docs/open-graph.md) for metadata and asset checks.
+Root `proxy.ts` maps app and staging roots to the internal `/workspace` route and redirects the former `/demo` path to staging. Locally, `/workspace` and `/demo` on `localhost` redirect to `staging.localhost`; `app.localhost` also redirects there until it has its own environment. This routing does not enforce access control. Both production product hosts show the same simulation until a backend is connected. See [Open Graph and social sharing](docs/open-graph.md) for metadata and asset checks.
 
 ## Local geographic reference data
 

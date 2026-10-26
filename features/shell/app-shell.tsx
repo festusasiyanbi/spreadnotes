@@ -1,15 +1,16 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ArrowUpRight, BarChart3, CalendarDays, Check, ChevronDown, CircleHelp, LayoutDashboard, Link2, Megaphone, Menu, PenLine, Plus, Settings2, X, Layers3 } from "lucide-react";
+import { ArrowUpRight, BarChart3, CalendarDays, Check, ChevronDown, CircleHelp, LayoutDashboard, Link2, Megaphone, Menu, PenLine, Plus, Settings2, Sparkles, X, Layers3 } from "lucide-react";
 import { useSimulationStore } from "../simulation/store";
 import { Brand } from "./brand";
 import { ThemeToggle } from "./theme-toggle";
 
-export type AppView = "home" | "compose" | "calendar" | "library" | "ads" | "analytics" | "connections" | "settings";
+export type AppView = "home" | "compose" | "ai" | "calendar" | "library" | "ads" | "analytics" | "connections" | "settings";
 const links: { id: AppView; name: string; icon: typeof PenLine; group: "main" | "workspace" }[] = [
   { id: "home", name: "Overview", icon: LayoutDashboard, group: "main" },
   { id: "compose", name: "Create post", icon: PenLine, group: "main" },
+  { id: "ai", name: "SpreadNotes AI", icon: Sparkles, group: "main" },
   { id: "calendar", name: "Calendar", icon: CalendarDays, group: "main" },
   { id: "library", name: "Post library", icon: Layers3, group: "main" },
   { id: "ads", name: "Ads workspace", icon: Megaphone, group: "main" },
@@ -20,6 +21,7 @@ const links: { id: AppView; name: string; icon: typeof PenLine; group: "main" | 
 const titles: Record<AppView, { eyebrow: string; title: string; description: string }> = {
   home: { eyebrow: "YOUR WORKSPACE", title: "A clearer view of what’s next.", description: "Ideas in motion, all in one thoughtful place." },
   compose: { eyebrow: "PUBLISHING DESK", title: "Create a post.", description: "Write once, then make it right for every channel." },
+  ai: { eyebrow: "WRITING STUDIO", title: "SpreadNotes AI.", description: "Create and rewrite text with a local simulation." },
   calendar: { eyebrow: "YOUR CALENDAR", title: "The shape of your week.", description: "See what’s scheduled, and give each idea its moment." },
   library: { eyebrow: "POST LIBRARY", title: "Everything you’ve made.", description: "Find a draft, revisit a post, or pick up where you left off." },
   ads: { eyebrow: "PAID CAMPAIGNS", title: "Plan your reach.", description: "Build and follow campaigns across your ad accounts." },
@@ -39,7 +41,7 @@ export function AppShell({ view, onNavigate, children }: { view: AppView; onNavi
   const [addingWorkspace, setAddingWorkspace] = useState(false);
   const [workspaceDraft, setWorkspaceDraft] = useState("");
   const [isStaging, setIsStaging] = useState(false);
-  useEffect(() => setIsStaging(window.location.hostname === "staging.spreadnotes.app"), []);
+  useEffect(() => setIsStaging(["staging.spreadnotes.app", "staging.localhost"].includes(window.location.hostname)), []);
   const title = titles[view];
   function go(next: AppView) { onNavigate(next); setMenuOpen(false); window.scrollTo({ top: 0, behavior: "smooth" }); }
   return <div className="app-layout">
@@ -56,7 +58,6 @@ export function AppShell({ view, onNavigate, children }: { view: AppView; onNavi
     {menuOpen && <button className="sidebar-scrim" aria-label="Close navigation" onClick={() => setMenuOpen(false)} />}
     <div className="app-main">
       <header className="app-topbar"><button className="mobile-menu icon-only" onClick={() => setMenuOpen(true)} aria-label="Open menu"><Menu size={22} /></button><div className="app-breadcrumb"><span>{workspace}</span><span>/</span><strong>{view === "ads" ? "Ads workspace" : title.eyebrow.toLowerCase()}</strong></div><div className="topbar-actions"><span className="simulation-badge">{isStaging ? "STAGING · TEST" : "SIMULATION"}</span><ThemeToggle label={false} /><button className="topbar-avatar" onClick={() => go("settings")} aria-label="Open settings">{displayName.slice(0, 1).toUpperCase()}</button></div></header>
-      {isStaging && <div className="staging-banner">STAGING · TEST WORKSPACE · ALL ACTIONS SIMULATED</div>}
       <div className="app-content"><div className="app-page-intro"><div><span className="eyebrow">{title.eyebrow}</span><h1>{title.title}</h1><p>{title.description}</p></div>{view !== "compose" && view !== "ads" && <button className="button button-primary intro-action" onClick={() => go("compose")}>New post <PenLine size={16} /></button>}</div>{children}</div>
     </div>
   </div>;

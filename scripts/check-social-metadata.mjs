@@ -8,7 +8,17 @@ const root = fileURLToPath(new URL("../", import.meta.url));
 const pages = JSON.parse(await readFile(join(root, "features/seo/content.json"), "utf8"));
 const origin = new URL(process.argv[2] || "http://localhost:3000");
 const local = ["localhost", "127.0.0.1"].includes(origin.hostname);
-const checks = local ? Object.values(pages).map((page) => ({ page, url: new URL(page.path, origin) })) : [
+const preview = origin.hostname.endsWith(".vercel.app");
+const localStaging = new URL(`${origin.protocol}//staging.localhost:${origin.port || "3000"}`);
+const checks = local ? [
+  { page: pages.home, url: new URL("/", origin) },
+  { page: pages.signIn, url: new URL("/sign-in", localStaging) },
+  { page: pages.workspace, url: new URL("/", localStaging) },
+] : preview ? [
+  { page: pages.home, url: new URL("/", origin) },
+  { page: pages.signIn, url: new URL("/sign-in", origin) },
+  { page: pages.workspace, url: new URL("/workspace", origin) },
+] : [
   { page: pages.home, url: new URL("/", origin) },
   { page: pages.signIn, url: new URL("/sign-in", process.env.NEXT_PUBLIC_APP_ORIGIN || "https://app.spreadnotes.app") },
   { page: pages.workspace, url: new URL("/", process.env.NEXT_PUBLIC_APP_ORIGIN || "https://app.spreadnotes.app") },
@@ -51,7 +61,7 @@ for (const { page, url: pageUrl } of checks) {
   assert.equal(singleMeta(meta, "twitter:image:alt"), page.imageAlt);
   assert.equal(singleMeta(meta, "twitter:image:type"), "image/png");
 
-  if (page.indexable) {
+  if (page.indexable && !preview) {
     assert.equal(canonical.length, 1, `${page.path} must have one canonical URL`);
     if (!local) assert.equal(new URL(canonical[0].href).origin, pageUrl.origin);
     assert.equal(new URL(canonical[0].href).pathname, page.path);
@@ -64,8 +74,8 @@ for (const { page, url: pageUrl } of checks) {
 
   for (const key of ["og:image", "twitter:image"]) {
     const imageUrl = new URL(singleMeta(meta, key));
-    assert.equal(imageUrl.origin, new URL(singleMeta(meta, "og:url")).origin, `${key} points to another origin`);
-    const imageResponse = await fetch(local ? new URL(imageUrl.pathname + imageUrl.search, origin) : imageUrl);
+    if (!local) assert.equal(imageUrl.origin, new URL(singleMeta(meta, "og:url")).origin, `${key} points to another origin`);
+    const imageResponse = await fetch(local ? new URL(imageUrl.pathname + imageUrl.search, pageUrl.origin) : imageUrl);
     assert.equal(imageResponse.status, 200, `${key} did not return HTTP 200`);
     assert.match(imageResponse.headers.get("content-type") || "", /^image\/png/);
     const image = sharp(Buffer.from(await imageResponse.arrayBuffer()));

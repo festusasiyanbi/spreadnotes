@@ -1,4 +1,4 @@
-import { readFile, writeFile, copyFile } from "node:fs/promises";
+import { readFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { join } from "node:path";
 import sharp from "sharp";
@@ -29,15 +29,10 @@ function cardSvg(page) {
 
 for (const page of Object.values(pages)) {
   const publicImage = join(root, "public/brand", page.imageFile);
-  const routeDir = join(root, "app", page.path === "/" ? "" : page.path.slice(1));
   await sharp(Buffer.from(cardSvg(page)))
     .composite([{ input: mark, left: 100, top: 95 }])
     .png({ compressionLevel: 9 })
     .toFile(publicImage);
-  for (const prefix of ["opengraph", "twitter"]) {
-    await copyFile(publicImage, join(routeDir, `${prefix}-image.png`));
-    await writeFile(join(routeDir, `${prefix}-image.alt.txt`), page.imageAlt);
-  }
 }
 
 console.log("Generated home, sign-in, and simulation Open Graph and X preview images.");

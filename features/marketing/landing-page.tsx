@@ -6,7 +6,7 @@ import { Brand } from "../shell/brand";
 import { ThemeToggle } from "../shell/theme-toggle";
 import { NetworkMark } from "../platforms/network-mark";
 
-const workspaceHref = process.env.NEXT_PUBLIC_APP_ORIGIN ? `${process.env.NEXT_PUBLIC_APP_ORIGIN.replace(/\/$/, "")}/sign-in` : "/sign-in";
+const workspaceHref = "/sign-in";
 
 const channels = [
   { id: "linkedin", name: "LinkedIn" },
