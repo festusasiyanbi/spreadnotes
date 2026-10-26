@@ -49,7 +49,7 @@ export function Analytics({ onOpenPost, onOpenCampaign }: { onOpenPost: (id: str
       return snapshot ? [{ key: `${campaign.id}:${id}`, title: campaign.name, channel: id, date: snapshot.updatedAt, metrics: snapshot.metrics, currency: campaign.currency, source: "spreadnotes" as const, open: () => onOpenCampaign(campaign.id) }] : [];
     }));
   }, [tab, posts, campaigns, channel, connected, adConnected, connectionStates, adConnectionStates, onOpenPost, onOpenCampaign]);
-  const allowedRows = rows.filter((row) => Date.now() - new Date(row.date).getTime() <= period * 86400000 && (tab === "ads" || source === "all" || row.source === source) && row.title.toLowerCase().includes(search.trim().toLowerCase()));
+  const allowedRows = rows.filter((row) => Date.now() - new Date(row.date).getTime() <= period * 86400000 && (tab === "ads" || source === "all" || row.source === source) && (tab === "ads" || row.title.toLowerCase().includes(search.trim().toLowerCase())));
   const headlineKeys = tab === "organic" ? ["Impressions", "Views", "Video views", "Reactions", "Likes", "Comments"] : ["Spend", "Impressions", "Clicks"];
   const totals = channel === "all" ? [] : headlineKeys.map((key) => ({ key, value: allowedRows.reduce((sum, row) => sum + (row.metrics.find((metric) => metric.key === key)?.value ?? 0), 0) })).filter((item) => item.value > 0);
   const selectedCatalog = tab === "organic" ? channel === "all" ? null : organicMetrics[channel as PlatformId] : channel === "all" ? null : adMetrics[channel as AdNetworkId];
