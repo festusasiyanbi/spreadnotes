@@ -19,7 +19,10 @@ export function SignInPage() {
   const [password, setPassword] = useState("");
   const [magicRequested, setMagicRequested] = useState(false);
   const [publicHref, setPublicHref] = useState("https://spreadnotes.app/");
-  useEffect(() => { if (window.location.hostname.endsWith(".localhost")) setPublicHref("http://localhost:3000/"); }, []);
+  useEffect(() => {
+    if (window.location.hostname.endsWith(".localhost")) setPublicHref("http://localhost:3000/");
+    else if (window.location.hostname.endsWith(".vercel.app")) setPublicHref(window.location.origin);
+  }, []);
 
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -27,7 +30,7 @@ export function SignInPage() {
     if (method === "magic") { setMagicRequested(true); return; }
     signIn(email.trim(), name.trim());
     setPassword("");
-    router.push("/");
+    router.push(window.location.hostname.endsWith(".vercel.app") ? "/workspace" : "/");
   }
 
   return <main className="auth-page"><div className="auth-main"><header className="auth-header"><Brand /><ThemeToggle label={false} /></header><Link className="back-link" href={publicHref}><ArrowLeft size={16} /> Back to home</Link><div className="auth-content"><span className="eyebrow">WELCOME TO SPREADNOTES</span><h1>A clearer place<br />to <em>begin.</em></h1><p>Choose how you would sign in. These paths show the planned experience; authentication is not connected yet.</p>
