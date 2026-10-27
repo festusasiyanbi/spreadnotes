@@ -1,5 +1,6 @@
 node_modules/
 .next/
+public/video-core/
 out/
 .env*
 .DS_Store

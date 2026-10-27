@@ -78,15 +78,24 @@ The current project is an interactive, frontend-only simulation. The carousel an
 
 ## Organic and paid analytics UI
 
-- [x] Provide a distinct Analytics area for organic posts and Meta, LinkedIn, and TikTok ads, with account filters, date ranges, a sample trend, and post or campaign detail.
+- [x] Provide a distinct Analytics area for organic posts and Meta, LinkedIn, and TikTok ads, with account filters, date ranges, summary cards, report cards, and post or campaign detail.
+- [x] Show report counts across platforms, compare performance only within a selected platform, and chart engagement actions within one post. Do not invent a daily trend from snapshot data.
 - [x] Filter organic sample reports by platform, date, title, and publishing source. Include clearly labelled examples of posts published directly on connected platforms and an expandable per-post metric breakdown.
 - [x] Use platform capability maps to show only supported sample metrics and explain permission, format, and reporting-window limits.
 - [x] Keep simulated spend and performance clearly labelled; do not combine platform-specific view or click definitions into one cross-network total.
 - [ ] Replace sample reports with approved, cached platform reporting adapters when the backend is built. Retrieve owned native posts only when that platform and account grant history access; deduplicate by platform post ID and retain source, account, metric availability, and last-updated timestamps. LinkedIn member history needs restricted Community Management access; TikTok's current video path must not be presented as photo-post reporting.
 
+## Creator Hub
+
+- [x] Add a local recording and import workspace with screen, camera, and combined modes where supported.
+- [x] Trim short videos in the browser, export MP4, MOV, WebM, or animated WebP, and attach the finished file to an editable post draft. Files without readable duration can still be exported in full.
+- [x] Preview viewing access, watch pages, and iframe embeds locally; example links are not hosted until authentication and media storage exist.
+- [ ] Add authenticated workspace-scoped video storage, a player, Drive-style sharing controls, and iframe embeds after the backend is ready. See `docs/creator-hub.md`.
+- [ ] Deliver finished assets through approved, account-specific native video publishing adapters.
+
 ## Workspace and account connection UI
 
-- [x] Keep the workspace screens compact: page headings and actions replace large decorative welcome, ads, and AI banners; staging keeps a small header badge.
+- [x] Keep the workspace screens compact: page headings and actions replace large decorative welcome, ads, and AI banners. Public and workspace screens share one visual theme.
 - [x] Use shared field colors and focus states in both themes, and constrain long calendar titles to their card.
 - [x] Explain that ad accounts need separate provider authorization, account selection, reporting access, and campaign management access. The sample account picker and connection states remain local to each workspace.
 - [x] Keep AI ad-copy insertion in an editable campaign draft. Existing network-specific copy stays intact, is labelled in review, and can be reset to the new shared copy.
