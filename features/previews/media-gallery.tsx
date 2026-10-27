@@ -14,7 +14,7 @@ export function MediaGallery({ media, label }: { media: SimulationMedia[]; label
 
   return <div className="media-gallery" aria-label={`${label} media preview`}>
     <div className="media-gallery-stage">
-      {current.kind === "image" || isPoster ? <img src={current.url} alt={current.altText || current.name} /> : current.kind === "video" ? <video key={current.id} src={current.url} controls aria-label={current.name} /> : <div className="media-gallery-document"><FileText size={30} /><strong>{current.name}</strong><span>Document preview</span></div>}
+      {current.kind === "image" || isPoster ? <img src={current.url} alt={current.altText || current.name} /> : current.kind === "video" ? <video key={current.id} src={current.url} poster={current.posterUrl} controls aria-label={current.name} /> : <div className="media-gallery-document"><FileText size={30} /><strong>{current.name}</strong><span>Document preview</span></div>}
       {isPoster && <span className="media-gallery-poster"><Play size={13} /> Video concept</span>}
       {multiple && <><button className="media-gallery-arrow previous" type="button" onClick={() => setRequestedIndex((index - 1 + media.length) % media.length)} aria-label="Previous media"><ChevronLeft size={20} /></button><button className="media-gallery-arrow next" type="button" onClick={() => setRequestedIndex((index + 1) % media.length)} aria-label="Next media"><ChevronRight size={20} /></button><span className="media-gallery-count">{index + 1} / {media.length}</span></>}
     </div>

@@ -13,7 +13,8 @@ import { AdsWorkspace } from "../ads/ads-workspace";
 import { Analytics } from "../analytics/analytics";
 import { Settings } from "../settings/settings";
 import { AiHub } from "../ai/ai-hub";
-import { useSimulationStore } from "./store";
+import { CreatorHub } from "../creator-hub/creator-hub";
+import { simulationId, useSimulationStore, type Post } from "./store";
 
 export function SimulationApp() {
   const router = useRouter();
@@ -45,10 +46,25 @@ export function SimulationApp() {
   function editPost(id: string) { setEditingPostId(id); setView("compose"); }
   function openCampaign(id: string) { setEditingCampaignId(id); setCampaignFromAi(false); setView("ads"); }
   function returnToCampaign(id?: string) { setEditingCampaignId(id ?? null); setCampaignFromAi(!id); setView("ads"); }
+  function useVideoInPost(file: File, posterUrl?: string) {
+    const state = useSimulationStore.getState();
+    const id = simulationId();
+    const channels = state.connected.filter((channel) => (state.connectionStates[channel] ?? "ready") === "ready");
+    const post: Post = {
+      id, title: file.name.replace(/\.[^.]+$/, "").slice(0, 56), text: "", variants: {}, channels,
+      media: [{ id: simulationId(), name: file.name, kind: file.type === "image/webp" ? "image" : "video", url: URL.createObjectURL(file), type: file.type, bytes: file.size, posterUrl }],
+      youtubeTitle: file.name.replace(/\.[^.]+$/, ""), status: "draft", channelStatus: Object.fromEntries(channels.map((channel) => [channel, "draft"])),
+      timezone: state.timezone, createdAt: new Date().toISOString(),
+    };
+    state.upsertPost(post);
+    editPost(id);
+    setNotice("Your video is in an editable post draft.");
+  }
   const content = {
     home: <Dashboard onNavigate={navigate} onOpenPost={openPost} onOpenCampaign={openCampaign} onEditPost={editPost} />,
     compose: <PostComposer key={editingPostId ?? "new"} postId={editingPostId} onNavigate={navigate} onNotice={setNotice} />,
     ai: <AiHub onOpenPost={editPost} onOpenCampaign={returnToCampaign} />,
+    creator: null,
     calendar: <CalendarView onOpenPost={openPost} onOpenCampaign={openCampaign} onNavigate={navigate} />,
     library: <PostsLibrary postId={selectedPostId} onEditPost={editPost} onNavigate={navigate} onNotice={setNotice} />,
     ads: <AdsWorkspace key={editingCampaignId ?? "ads"} campaignId={editingCampaignId} resumeAiDraft={campaignFromAi} onOpenCampaign={openCampaign} onNavigate={navigate} onNotice={setNotice} />,
@@ -56,5 +72,5 @@ export function SimulationApp() {
     connections: <Connections />,
     settings: <Settings onNotice={setNotice} onNavigate={navigate} />,
   } satisfies Record<AppView, React.ReactNode>;
-  return <AppShell view={view} onNavigate={navigate}>{content[view]}{notice && <div className="toast" role="status">{notice}</div>}</AppShell>;
+  return <AppShell view={view} onNavigate={navigate}>{content[view]}<div hidden={view !== "creator"}><CreatorHub onUseInPost={useVideoInPost} /></div>{notice && <div className="toast" role="status">{notice}</div>}</AppShell>;
 }
